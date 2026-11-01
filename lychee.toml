@@ -1,0 +1,29 @@
+# Link checker configuration (https://lychee.cli.rs/)
+# Used by .github/workflows/docs-validation.yml and for local runs:
+#   lychee --config lychee.toml docs README.md CONTRIBUTING.md
+
+# Be polite and tolerant of flaky networks: retry transient failures before failing.
+max_concurrency = 8
+max_retries = 3
+retry_wait_time = 3
+timeout = 20
+
+# 429 means "rate limited": the page exists, the host just asked us to slow down.
+accept = ["200..=299", "429"]
+
+# Resolve #fragments for local files so renamed headings are caught.
+# Value syntax requires lychee 0.24 or newer (earlier versions used a boolean).
+include_fragments = "anchor-only"
+
+# Never treat local development URLs as broken links.
+exclude_loopback = true
+exclude_private = true
+exclude_link_local = true
+
+exclude = [
+    # Example URLs that appear in documentation prose and must not be contacted.
+    '^https?://(www\.)?example\.(com|org|net)',
+    # The documentation tells readers to replace these placeholders with their own account.
+    '^https://github\.com/(OWNER|your-username|YOUR-USERNAME|<[^>]+>)',
+    '^https://[^/]+\.github\.io/(REPO|docuflow)/?$',
+]

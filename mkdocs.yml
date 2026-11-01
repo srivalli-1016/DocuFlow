@@ -1,0 +1,130 @@
+site_name: DocuFlow
+site_description: Automated developer documentation. Write Markdown, validate it with GitHub Actions, publish to GitHub Pages.
+site_author: DocuFlow contributors
+
+# Both values are read from the environment so no repository details are hardcoded.
+# The deploy workflow sets them automatically. Locally you can leave them unset.
+#   export DOCS_SITE_URL="https://<user>.github.io/<repo>/"
+#   export DOCS_REPO_URL="https://github.com/<user>/<repo>"
+site_url: !ENV [DOCS_SITE_URL, ""]
+repo_url: !ENV [DOCS_REPO_URL, ""]
+repo_name: GitHub Repository
+
+copyright: Released under the MIT License
+
+theme:
+  name: material
+  language: en
+  logo: assets/images/logo.svg
+  favicon: assets/images/favicon.svg
+  font:
+    text: Inter
+    code: JetBrains Mono
+  palette:
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+  icon:
+    repo: fontawesome/brands/github
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - navigation.tracking
+    - toc.follow
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+plugins:
+  - search
+
+extra_css:
+  - assets/css/docuflow.css
+
+extra_javascript:
+  - assets/js/docuflow.js
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.details
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+# Every one of these becomes a build failure under `mkdocs build --strict`.
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
+nav:
+  - Home: index.md
+  - Documentation:
+      - Getting Started:
+          - Introduction: getting-started/introduction.md
+          - Installation: getting-started/installation.md
+          - Quick Start: getting-started/quick-start.md
+          - Project Structure: getting-started/project-structure.md
+      - User Guide:
+          - Writing Documentation: user-guide/writing-documentation.md
+          - Markdown Formatting: user-guide/markdown-formatting.md
+          - Adding Images: user-guide/adding-images.md
+          - Navigation Configuration: user-guide/navigation-configuration.md
+      - Automation:
+          - GitHub Actions Overview: automation/github-actions-overview.md
+          - Documentation Validation: automation/documentation-validation.md
+          - Broken Link Checking: automation/broken-link-checking.md
+          - Pull Request Workflow: automation/pull-request-workflow.md
+          - Automatic Deployment: automation/automatic-deployment.md
+      - Developer Guide:
+          - Local Development: developer-guide/local-development.md
+          - Configuration: developer-guide/configuration.md
+          - Contributing: developer-guide/contributing.md
+          - Troubleshooting: developer-guide/troubleshooting.md
+      - Resources:
+          - FAQ: resources/faq.md
+          - Changelog: resources/changelog.md
+          - License: resources/license.md
+  - Features: features.md

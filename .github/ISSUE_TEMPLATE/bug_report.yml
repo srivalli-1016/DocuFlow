@@ -1,0 +1,69 @@
+name: Bug report
+description: Report a problem with the DocuFlow site, build, or workflows.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve DocuFlow. Please fill in as much as you can; exact commands and error text help most.
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue description
+      description: What is wrong? Include the full error message if there is one.
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Affected documentation page or file
+      description: A page address, or a file path such as `docs/automation/broken-link-checking.md` or `.github/workflows/docs-validation.yml`.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Run `mkdocs serve`
+        2. Open the page
+        3. Click ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Python version, browser, and whether this happens locally or in GitHub Actions.
+      placeholder: "macOS 14, Python 3.12, Firefox, local mkdocs serve"
+    validations:
+      required: false
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed changes
+      description: If you know how to fix it, describe the change.
+    validations:
+      required: false
+  - type: checkboxes
+    id: validation
+    attributes:
+      label: Validation checklist
+      options:
+        - label: I searched existing issues and did not find a duplicate.
+          required: true
+        - label: I ran `mkdocs build --strict` and included relevant output above.
+          required: false

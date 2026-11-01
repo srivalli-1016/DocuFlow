@@ -1,0 +1,20 @@
+# Build output
+site/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Node (markdownlint is run through npx, but local installs may appear)
+node_modules/
+
+# Link checker cache
+.lycheecache
+
+# Editors and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

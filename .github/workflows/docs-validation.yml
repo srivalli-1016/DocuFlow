@@ -1,0 +1,126 @@
+name: Documentation Validation
+
+# Runs on every pull request to main, and on pushes to other branches that touch documentation
+# or its configuration. Pushes to main are validated through their pull request and then built
+# again by deploy-docs.yml before publishing.
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches-ignore: [main]
+    paths:
+      - "docs/**"
+      - "mkdocs.yml"
+      - "requirements.txt"
+      - "*.md"
+      - ".markdownlint.json"
+      - ".markdownlintignore"
+      - "lychee.toml"
+      - ".github/workflows/docs-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  NO_MKDOCS_2_WARNING: "1"
+
+concurrency:
+  group: docs-validation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Markdown lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Run markdownlint
+        run: npx --yes markdownlint-cli@0.45.0 "**/*.md" ".github/**/*.md"
+
+  build:
+    name: Strict build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Build site (warnings are errors)
+        run: mkdocs build --strict
+
+      - name: Check links in the built site (offline)
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          lycheeVersion: v0.24.2
+          fail: true
+          jobSummary: true
+          args: --config lychee.toml --offline --no-progress --root-dir ${{ github.workspace }}/site site
+
+  links:
+    name: Link check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Check internal and external links in source files
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          lycheeVersion: v0.24.2
+          fail: true
+          jobSummary: true
+          args: --config lychee.toml --no-progress docs README.md CONTRIBUTING.md
+
+  result:
+    name: Validation result
+    if: ${{ always() }}
+    needs: [lint, build, links]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Summarize and enforce
+        env:
+          LINT: ${{ needs.lint.result }}
+          BUILD: ${{ needs.build.result }}
+          LINKS: ${{ needs.links.result }}
+        run: |
+          {
+            echo "## Documentation validation"
+            echo
+            echo "| Check | Result |"
+            echo "| --- | --- |"
+            echo "| Markdown lint | ${LINT} |"
+            echo "| Strict build | ${BUILD} |"
+            echo "| Link check | ${LINKS} |"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+          if [ "$LINT" != "success" ] || [ "$BUILD" != "success" ] || [ "$LINKS" != "success" ]; then
+            echo "::error::One or more documentation checks did not succeed. See the job summary."
+            exit 1
+          fi
+          echo "All documentation checks passed."

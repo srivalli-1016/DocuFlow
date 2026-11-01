@@ -1,0 +1,65 @@
+name: Documentation request
+description: Ask for a new page, a correction or a clearer explanation.
+title: "[Docs]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form to request documentation changes. If you want to write the change yourself, see CONTRIBUTING.md.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Request type
+      options:
+        - New page
+        - Correction
+        - Clarification
+        - Example or screenshot
+        - Navigation or structure
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue description
+      description: What is missing, wrong or confusing?
+    validations:
+      required: true
+  - type: input
+    id: page
+    attributes:
+      label: Affected documentation page
+      description: Page address or file path. Write "New page" if none exists yet.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+      description: What should a reader be able to do or understand after reading the page?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+      description: What does the documentation say or lack today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed changes
+      description: Suggested wording, outline or links to sources.
+    validations:
+      required: false
+  - type: checkboxes
+    id: validation
+    attributes:
+      label: Validation checklist
+      options:
+        - label: I searched the site and existing issues for this topic.
+          required: true
+        - label: I am willing to review a pull request for this change.
+          required: false

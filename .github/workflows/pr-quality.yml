@@ -1,0 +1,59 @@
+name: Pull Request Quality
+
+# Cheap checks that complement docs-validation.yml. Linting, building and link checking are
+# deliberately NOT repeated here; they run once in docs-validation.yml.
+# This workflow has no path filter so its checks always report a status on pull requests.
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+
+permissions:
+  contents: read
+
+env:
+  NO_MKDOCS_2_WARNING: "1"
+
+concurrency:
+  group: pr-quality-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  config:
+    name: Configuration checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml==6.0.3
+
+      - name: Validate configuration and workflow security rules
+        run: python scripts/check_config.py
+
+  description:
+    name: Pull request description
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require the validation checklist from the template
+        env:
+          # Passed through the environment so pull request text is never executed as shell code.
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          if printf '%s' "$PR_BODY" | grep -qi "validation checklist"; then
+            echo "Validation checklist found."
+          else
+            echo "::error::The pull request description must keep the 'Validation checklist' section from the template."
+            exit 1
+          fi
