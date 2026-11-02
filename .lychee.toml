@@ -1,0 +1,5 @@
+max_retries = 2
+timeout = 20
+accept = [200, 204, 206, 429]
+exclude_loopback = true
+exclude_path = ["site", "site-preview", "node_modules"]
