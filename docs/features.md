@@ -1,58 +1,49 @@
----
-title: Features
-description: What the DocuFlow site and its automation provide.
----
+# Smart Voting System Features
 
-# Features
+## User registration and login
 
-DocuFlow combines a documentation site built with MkDocs and Material for MkDocs with GitHub Actions workflows that
-check every change. This page lists what is included and where to read more.
+- **Purpose:** *Not provided yet. Describe why User registration and login exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
 
-## Reading experience
+## Role-based authentication
 
-| Feature | How it is provided |
-| --- | --- |
-| Full-text search | Material for MkDocs `search` plugin with suggestions, highlighting and shareable queries |
-| Dark and light themes | Palette toggle in the header; the default follows the operating system setting |
-| Table of contents | Generated from headings on every page and kept in view while scrolling |
-| Syntax highlighting | Pygments through `pymdownx.highlight` |
-| Copy-code buttons | The `content.code.copy` theme feature |
-| Previous and next links | The `navigation.footer` theme feature |
-| Callouts | Admonitions such as note, warning and tip |
-| Diagrams | Mermaid fenced blocks, rendered in the browser |
-| Mobile layout | Responsive layout with a drawer navigation on small screens |
+- **Purpose:** *Not provided yet. Describe why Role-based authentication exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
 
-??? example "See the copy button and highlighting"
+## Voter dashboard
 
-    ```python
-    def greet(name: str) -> str:
-        """Return a friendly greeting."""
-        return f"Hello, {name}!"
-    ```
+- **Purpose:** *Not provided yet. Describe why Voter dashboard exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
 
-## Automation
+## Candidate management
 
-| Capability | Where it lives | Details |
-| --- | --- | --- |
-| Markdown linting | `docs-validation.yml` | [Documentation validation](automation/documentation-validation.md) |
-| Link checking | `docs-validation.yml` | [Broken link checking](automation/broken-link-checking.md) |
-| Strict builds | `docs-validation.yml` | Warnings become errors |
-| Configuration checks | `pr-quality.yml` | [Pull request workflow](automation/pull-request-workflow.md) |
-| Deployment | `deploy-docs.yml` | [Automatic deployment](automation/automatic-deployment.md) |
+- **Purpose:** *Not provided yet. Describe why Candidate management exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
 
-## Diagram example
+## Election management
 
-```mermaid
-flowchart LR
-    A[Edit Markdown] --> B[Open pull request]
-    B --> C{Checks pass?}
-    C -- yes --> D[Review and merge]
-    C -- no --> A
-    D --> E[Deploy to GitHub Pages]
-```
+- **Purpose:** *Not provided yet. Describe why Election management exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
 
-## Design decisions
+## Secure vote casting
 
-- No database, backend or paid service is needed. The output is static HTML.
-- No repository secrets are used. Workflows rely on the built-in `GITHUB_TOKEN` with minimal permissions.
-- Every tool version is pinned, so a build today behaves like a build next month.
+- **Purpose:** *Not provided yet. Describe why Secure vote casting exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
+
+## Vote counting
+
+- **Purpose:** *Not provided yet. Describe why Vote counting exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
+
+## Election results dashboard
+
+- **Purpose:** *Not provided yet. Describe why Election results dashboard exists.*
+- **How it works:** *Not provided yet.*
+- **Related components:** *Not provided yet.*
